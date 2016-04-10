@@ -1,0 +1,107 @@
+---
+title: "朱立倫的Facebook粉絲團分析"
+output: github_document
+---
+
+```
+```
+
+## 2016/01/01至04/10貼文分析
+
+## 讀取朱立倫粉絲團資料
+
+
+```{r echo=T}
+if (!require('Rfacebook')){
+    install.packages("Rfacebook")
+    library(Rfacebook)
+}
+
+totalPage<-NULL
+lastDate<-Sys.Date()
+numberOfPost<-30
+DateVector<-seq(as.Date("2016-01-01"),lastDate,by="5 days")
+DateVectorStr<-as.character(DateVector)
+DateVectorStr
+
+token<-'CAACmPyrae3YBAI42ZCdsJtbh3613tn70IC2XoP6CijYiRXov4VUZAZB4piOB2ROqJcPT7RcYssZBOEMxQ519yO6VUuIda66Dii6h2G91MeFAY89MTyuhDNWawPFZBOq5zHwYGgO2uKKIIg0EH7E2JEOZCZCVYcZCIR1PyugidJjX0prcOu1Q5MmxJat5DEibppblYZAe5D8FhNmDxORjiGXZAt'
+for(i in 1:(length(DateVectorStr)-1)){
+    tempPage<-getPage("llchu", token,
+                      since = DateVectorStr[i],until = DateVectorStr[i+1])
+    totalPage<-rbind(totalPage,tempPage)
+}
+nrow(totalPage)
+
+totalPage$datetime <- as.POSIXct(totalPage$created_time, 
+                                 format = "%Y-%m-%dT%H:%M:%S+0000", 
+                                 tz = "GMT")
+totalPage$dateTPE <- format(totalPage$datetime, "%Y-%m-%d", 
+                            tz = "Asia/Taipei")
+totalPage$weekdays <-weekdays(as.Date(totalPage$dateTPE))
+```
+
+## 每日發文數分析
+
+分析朱立倫粉絲團每天的發文數
+
+```{r echo=T}
+output<-aggregate(message~weekdays+dateTPE,totalPage,length)
+library(knitr)
+kable(output, digits=2)
+```
+
+討論：
+
+從輸出結果發現，朱立倫在一月份發文較頻繁，推測是與1月16日總統大選有關，自從總統大選過後，每日發文數為一篇至多到三篇。而總統大選前，發現1月12日發文數最多，推測除了與選舉有關以外，可能與當天朱立倫至台中拜票有關，因在台中遇到一位支持者說：「這局可能難贏，但不要輸太多」，加上發文的影片幾乎都是表達感謝百姓的付出等，也許是希望能得到更多人的支持。
+
+## 每日like數
+
+分析朱立倫粉絲團每天發文按讚的平均人數
+
+
+```{r echo=T}
+output<-aggregate(likes_count~dateTPE,totalPage,mean)
+library(knitr)
+kable(output, digits=2)
+```
+
+討論：
+
+從輸出結果發現，按讚人數最多的時間為1月16日總統大選當天共有83386人按讚，我分析了當天朱立倫發了兩篇文，一篇說明周子瑜事件共有3.6萬人按讚，另一篇則是公布敗選消息共有13萬人按讚，並從過去的歷史紀錄中，可發現他的每一篇發文按讚人數幾乎不到5萬的，又在留言中發現，有支持與不支持者兩派的聲音，因此我保守推測按讚的人數中，有一半是支持其他黨派的人。
+
+從輸出結果發現，第二多按讚的發文為：2月6日共5萬多個讚，推測因南台大地震的關係，且朱立倫從新北市派出三十位特搜大隊同仁前往台南協助救援，因而受到關注。
+      
+
+## 每日comments數
+
+分析朱立倫粉絲團每天發文時所留言的平均人數
+
+```{r echo=T}
+output<-aggregate(comments_count~dateTPE,totalPage,mean)
+library(knitr)
+kable(output, digits=2)
+```
+
+討論：
+
+從輸出結果發現，1月16日當天獲得最多的留言數，1月15日獲得次多的留言數，推測皆與總統大選有關，而1月15日留言數也與周子瑜事件有關係。
+
+從1月15日留言數中，發現有一位女士留言次數多、內容幾乎是相同的，推測是國民黨的人，看過留言後，推測1月15日留言者多是支持國民黨的人。
+
+在1月16日當天公布敗選消息後，留言中就有許多支持者與他黨支持者間互相論戰，因而推測留言數變多是因互相論戰。
+
+## 每日shares數
+
+分析朱立倫粉絲團每天發文時所分享的平均人數
+
+```{r echo=T}
+output<-aggregate(shares_count~dateTPE,totalPage,mean)
+library(knitr)
+kable(output, digits=2)
+```
+
+討論：
+
+從輸出結果發現，1月15日分享人數最多，除了與總統大選有關，還有周子瑜事件，朱立倫對於周子瑜事件的發表，受到當日發文中最多人分享的一篇。
+
+
