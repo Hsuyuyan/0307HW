@@ -1,0 +1,67 @@
+---
+title: "1928-1969間，小兒麻痺在美國各州的發生率變化"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 資料前處理
+
+###把資料讀進來
+
+```{r echo=TRUE}
+polio<-read.csv("POLIO_Incidence.csv",stringsAsFactors = F)
+head(polio)
+```
+
+###將寬表格轉為長表格
+
+```{r echo=TRUE}
+library(reshape2)
+polio.m<-melt(polio,id.vars = c('YEAR','WEEK'))
+head(polio.m)
+```
+
+###處理缺值、計算年度發生率
+
+```{r echo=TRUE}
+polio.m[polio.m$value=="-",]$value<-NA #處理缺值,將"-"轉為NA
+polio.m$value<-as.numeric(polio.m$value) #將value欄位轉為數字
+polio.sumYear<- #各州各年度加總，計算該年度的總發生率
+    aggregate(value~YEAR+variable,data=polio.m,FUN=sum,na.rm=F)
+head(polio.sumYear)
+```
+
+##視覺化呈現
+
+###解釋如何選擇圖形種類
+若使用Treemap,無法表示出小兒麻痺在美國各州各年度發生率變化
+(各州為底、一年總計使用顏色表示、無法表示每年)，
+因此我選擇使用Heapmap來表示，
+Heapmap能顯示有三個變數所呈現的圖形。
+
+###程式碼、圖形呈現
+```{r echo=TRUE}
+library(ggplot2)
+ggplot(polio.sumYear, aes(YEAR, variable)) + 
+    geom_tile(aes(fill = value),colour = "white")+ 
+    theme_bw()+geom_vline(xintercept=1955)+
+    scale_fill_gradient(low = "white",high = "purple") 
+  
+```
+
+###解釋圖形
+圖形中，x軸為年分，y軸為美國各州，中間呈現各州該年度的總發生率，
+而顏色代表總發生率的數值高(紫色)到低(白色)，
+可從圖形中看出，
+在1955年後，因為有了小兒麻痺的疫苗，
+各州的小兒麻痺人數漸漸減少。
+
+
+
+
+
+
+
