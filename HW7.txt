@@ -1,0 +1,49 @@
+---
+title: "糖尿病 預測模型"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+
+```
+
+## 資料前處理
+### 解釋資料
+
+
+This is an R Markdown format used for publishing markdown documents to GitHub. When you click the **Knit** button all R code chunks are run and a markdown file (.md) suitable for publishing to GitHub is generated.
+
+### 把資料讀進來
+
+You can include R code in the document as follows:
+
+```{r echo=F}
+install.packages("mlbench")
+#此package內有很多dataset可練習
+
+library(mlbench)#讀資料 糖尿病資料集
+
+data(PimaIndiansDiabetes)#雙號
+
+str(PimaIndiansDiabetes)#diabetes:pos陽性/neg陰性
+
+#資料前處理
+PimaIndiansDiabetesC<-#雙號
+
+PimaIndiansDiabetes[complete.cases(PimaIndiansDiabetes),]#選資料完整的row
+
+c(nrow(PimaIndiansDiabetes),nrow(PimaIndiansDiabetesC))
+```
+
+## 分成訓練組跟測試組,並紀錄各組人數
+
+隨機將2/3的資料分到訓練組（Test==F），剩下1/3為測試組（Test==T）
+
+```{r pressure, echo=FALSE}
+PimaIndiansDiabetes$Test<-F 
+PimaIndiansDiabetes[sample(1:nrow(PimaIndiansDiabetes),nrow(PimaIndiansDiabetes)/3),]$Test<-T 
+c(sum(PimaIndiansDiabetes$Test==F),sum(PimaIndiansDiabetes$Test==T)) 
+
+```
+
+可得訓練組案例數為'r sum(PimaIndiansDiabetes$Test==F)'，測試組案例數為'r sum(PimaIndiansDiabetes$Test==T)'
