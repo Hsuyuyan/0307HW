@@ -2,7 +2,7 @@
 library(data.table)
 EARTHQUAKEa<-fread("期末專題/台灣地震歷史資料.csv",stringsAsFactors = F)
 EARTHQUAKEa<-data.frame(EARTHQUAKEa)
-EARTHQUAKEa$desc<-iconv(as.character(EARTHQUAKEa$desc),from="big5",to="UTF-8")
+#EARTHQUAKEa$desc<-iconv(as.character(EARTHQUAKEa$desc),from="big5",to="UTF-8")
 #EARTHQUAKE<-read.csv("期末專題/台灣地震歷史資料.csv",stringsAsFactors = F)
 head(EARTHQUAKEa,20)
 

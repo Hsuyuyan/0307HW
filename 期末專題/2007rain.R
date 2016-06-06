@@ -19,20 +19,23 @@ for(loc in 1:33){ #33 length(xmlList)
     totalVector<-rbind(totalVector,c(locName,dateTime,value))
   }
 }
-totalVector[c(32,61,93,124,156,187,219,251,282,314,345,377),]#Data[選Row,選Column],index向量
-totalVector<-#雙號
-  totalVector[complete.cases(totalVector),]#選資料完整的row
-c(nrow(totalVector),nrow(totalVector))
 
-mean(value,T=na.rm)
-
-rain07<-data.frame(totalVector)
-as.double(rain07$element)
-names(rain07)<-c("loc","date","element")
-par(mfrow=c(2,1),mar=c(4,4,2,1))#一張圖裡面有2x1個子圖
-hist(subset(rain07,date=="total")$element,col="green")
+as.numeric(rain07$date)
+rain07$element<-as.numeric(as.character(rain07$element))
 
 
+hist(subset(rain07,loc=="BANQIAO,板橋")$element,col="green")
+
+par(mfrow=c(4,1),mar=c(4,4,2,1))#一張圖裡面有4x1個子圖
+hist(subset(rain07,date=="total"&loc=="TAMSUI,淡水")$element,col="green")
+hist(subset(rain07,date=="total"&loc=="YUSHAN,玉山")$element,col="green")
+hist(subset(rain07,date=="total"&loc=="MIAOLI,苗栗")$element,col="green")
+hist(subset(rain07,date=="total"&loc=="PINGTUNG,屏東")$element,col="green")
+
+
+
+
+#hist(subset(rain07,date=="total")$element,col="green")
 xmlList[[1]] ##for each locations
 xmlList[[1]][[1]] ## 1 name
 xmlList[[1]][[2]] ## ID

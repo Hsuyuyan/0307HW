@@ -20,7 +20,7 @@ for(loc in 1:33){ #33 length(xmlList)
 }
 
 
-par(mfrow=c(2,1),mar=c(4,4,2,1))#一張圖裡面有2x1個子圖
+#par(mfrow=c(2,1),mar=c(4,4,2,1))#一張圖裡面有2x1個子圖
 
 hist(subset(xml,Team=="SAN")$TotalPoints,col="green")
 
@@ -130,43 +130,6 @@ length(xmlList[[2]][[9]][[1]][[7]])
 length(xmlList[[2]][[9]][[2]][[5]])
 unlist(xmlList[[2]][[9]][[1]][[6]])
 
-########################################################################################
-#?????????淚?????????察歷???.......End
-########################################################################################
 
-totalVector<-NULL
-headVector<-c()
-summaryInfo<-NULL
-for(j in 1:length(xmlList)){
-    #print(length(tempList[[j]]))
-    for(k in 1:length(xmlList[[j]])){
-        #if k==9--->each area
-        if(k!=9){
-            headVector<-c(headVector,unlist(xmlList[[j]][[k]]))
-        }else{
-            ## for each area
-            for(area in 1:length(xmlList[[j]][[k]])){
-                if(length(xmlList[[j]][[k]][[area]])<4){
-                    summaryInfo<-rbind(summaryInfo,c(headVector,areaHeadVector,unlist(xmlList[[j]][[k]][[area]])))   
-                }else{
-                    #1~4 area info, others station info
-                    areaHeadVector<-c(unlist(xmlList[[j]][[k]][[area]][[1]]),
-                                      unlist(xmlList[[j]][[k]][[area]][[2]]),
-                                      unlist(xmlList[[j]][[k]][[area]][[3]]),
-                                      unlist(xmlList[[j]][[k]][[area]][[4]]))
-                    #station info
-                    for(i in 5:length(xmlList[[j]][[k]][[area]])){
-                        #each area i xmlList[[2]][[9]][[i]]
-                        areaVector<-c(headVector,areaHeadVector,unlist(xmlList[[j]][[k]][[area]][[i]]))
-                        totalVector<-rbind(totalVector,areaVector)
-                        print(areaVector)
-                    }
-                }
-            }
-        }
-    }
-}
-head(totalVector)
-head(summaryInfo)
 
 #http://data.gov.tw/node/gov/resource/3311
